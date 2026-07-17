@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -51,15 +52,28 @@ export default function Sidebar() {
   return (
     <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col border-r border-zinc-800 bg-zinc-900/95 p-6 backdrop-blur-xl">
       <div className="border-b border-zinc-800 pb-6">
-        <h1 className="text-2xl font-black tracking-tight">
-          Cinarithm
-        </h1>
+        <div className="flex items-center gap-4">
+ <Image
+  src="/logo.png"
+  alt="Cinarithm Logo"
+  width={52}
+  height={52}
+  className="rounded-lg"
+ />
 
-        <p className="mt-1 text-sm text-zinc-500">
-          Studio
-        </p>
+  <div>
+    <h1 className="text-2xl font-black tracking-tight">
+      Cinarithm
+    </h1>
+
+    <p className="text-xs text-zinc-500">
+      Studio
+    </p>
+  </div>
+</div>
       </div>
 
+      
       <nav className="mt-10 flex-1 space-y-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
