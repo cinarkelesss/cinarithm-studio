@@ -1,11 +1,18 @@
 "use client";
-
-import { useState } from "react";
+import QuestionDrawer from "@/components/osym/QuestionDrawer";
 import { useRouter } from "next/navigation";
 import AppShell from "@/components/layout/AppShell";
 import StatsCards from "@/components/osym/StatsCards";
 import NewQuestionModal from "@/components/osym/NewQuestionModal";
-import { Download, Filter, Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
+import QuestionTable from "@/components/osym/QuestionTable";
+import { useEffect, useState } from "react";
+import QuestionsChart from "@/components/dashboard/QuestionsChart";
+import ExamDistributionChart from "@/components/dashboard/ExamDistributionChart";
+import TopTopicsChart from "@/components/dashboard/TopTopicsChart";
+import RecentQuestions from "@/components/dashboard/RecentQuestions";
+import QuickActions from "@/components/dashboard/QuickActions";
+import SearchToolbar from "@/components/osym/SearchToolbar";
 
 type Question = {
   id: number;
@@ -27,6 +34,15 @@ const [editExam, setEditExam] = useState("");
 const [editYear, setEditYear] = useState(0);
 const [editTopic, setEditTopic] = useState("");
 const [editDifficulty, setEditDifficulty] = useState("");
+const [search, setSearch] = useState("");
+const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+const [currentPage, setCurrentPage] = useState(1);
+
+useEffect(() => {
+  setCurrentPage(1);
+}, [search, sortOrder]);
+
+const ITEMS_PER_PAGE = 10;
   const router = useRouter();
   const totalQuestions = questions.length;
   const totalTYT = questions.filter((q) => q.exam === "TYT").length;
@@ -82,7 +98,28 @@ const handleUpdate = async () => {
     alert("Soru güncellenemedi.");
   }
 };
-  return (
+  const filteredQuestions = [...questions]
+  .filter((question) =>
+    `${question.exam} ${question.year} ${question.topic} ${question.difficulty}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  )
+  .sort((a, b) =>
+    sortOrder === "desc"
+      ? b.year - a.year
+      : a.year - b.year
+  );
+
+const totalPages = Math.max(
+  1,
+  Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE)
+);
+
+const paginatedQuestions = filteredQuestions.slice(
+  (currentPage - 1) * ITEMS_PER_PAGE,
+  currentPage * ITEMS_PER_PAGE
+);
+return (
     <AppShell>
       <div className="space-y-8">
         <div className="flex items-center justify-between">
@@ -111,27 +148,34 @@ const handleUpdate = async () => {
           totalAYT={totalAYT}
           totalTopics={totalTopics}
         />
+<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+  <QuestionsChart questions={questions} />
 
-        <div className="flex gap-4">
-          <div className="flex flex-1 items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-4">
-            <Search size={18} className="text-zinc-500" />
+  <ExamDistributionChart questions={questions} />
+</div>
+<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+  <div className="lg:col-span-2">
+    <TopTopicsChart questions={questions} />
+  </div>
 
-            <input
-              placeholder="Soru ara..."
-              className="h-12 flex-1 bg-transparent outline-none"
-            />
-          </div>
+  <div className="space-y-6">
+    <RecentQuestions questions={questions} />
 
-          <button className="flex items-center gap-2 rounded-xl border border-zinc-800 px-5 hover:bg-zinc-900">
-            <Filter size={18} />
-            Filtre
-          </button>
+    <QuickActions
+      onNewQuestion={() => setOpen(true)}
+    />
+  </div>
+</div>
+        <SearchToolbar
+  search={search}
+  setSearch={setSearch}
+  sortOrder={sortOrder}
+  toggleSort={() =>
+    setSortOrder((prev) => (prev === "desc" ? "asc" : "desc"))
+  }
+/>
 
-          <button className="flex items-center gap-2 rounded-xl border border-zinc-800 px-5 hover:bg-zinc-900">
-            <Download size={18} />
-            Export
-          </button>
-        </div>
+          
 
         <div className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900">
           <table className="w-full">
@@ -145,21 +189,10 @@ const handleUpdate = async () => {
               </tr>
             </thead>
 
-            <tbody>
-              {questions.map((question) => (
-                <tr
-                  key={question.id}
-                  className="border-b border-zinc-800 transition hover:bg-zinc-800/40"
-                >
-                  <td className="p-4">{question.exam}</td>
-                  <td className="p-4">{question.year}</td>
-                  <td className="p-4">{question.topic}</td>
-                  <td className="p-4">{question.difficulty}</td>
-
-                  <td className="p-4">
-  <div className="flex justify-end gap-2">
-   <button
-  onClick={() => {
+            <QuestionTable
+  questions={paginatedQuestions}
+  
+  onOpen={(question) => {
     setSelectedQuestion(question);
 
     setEditExam(question.exam);
@@ -169,104 +202,48 @@ const handleUpdate = async () => {
 
     setDrawerOpen(true);
   }}
-  className="rounded-lg border border-zinc-700 px-3 py-1 text-sm hover:bg-zinc-800"
->
-  Aç
-</button>
-
-    <button
-      onClick={() => handleDelete(question.id)}
-      className="rounded-lg border border-red-600 px-3 py-1 text-sm text-red-400 hover:bg-red-600 hover:text-white"
-    >
-      Sil
-    </button>
-  </div>
-</td>
-                </tr>
-              ))}
-            </tbody>
+  onDelete={handleDelete}
+/>
           </table>
-        </div>
-      </div>
-
-      {drawerOpen && selectedQuestion && (
-  <div className="fixed inset-0 z-50 flex justify-end bg-black/40">
-    <div className="h-full w-[500px] bg-zinc-950 border-l border-zinc-800 p-8 overflow-y-auto">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">
-          Soruyu Düzenle
-        </h2>
-
-        <button
-          onClick={() => setDrawerOpen(false)}
-          className="rounded-lg border border-zinc-700 px-3 py-1 hover:bg-zinc-800"
-        >
-          ✕
-        </button>
-      </div>
-
-      <div className="mt-8 space-y-6">
-
-        <div>
-          <label className="mb-2 block text-sm text-zinc-400">
-            Sınav
-          </label>
-
-         <input
-  value={editExam}
-  onChange={(e) => setEditExam(e.target.value)}
-  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 p-3"
-/>
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm text-zinc-400">
-            Yıl
-          </label>
-
-          <input
-  type="number"
-  value={editYear}
-  onChange={(e) => setEditYear(Number(e.target.value))}
-  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 p-3"
-/>
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm text-zinc-400">
-            Konu
-          </label>
-
-          <input
-  value={editTopic}
-  onChange={(e) => setEditTopic(e.target.value)}
-  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 p-3"
-/>
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm text-zinc-400">
-            Zorluk
-          </label>
-
-          <input
-  value={editDifficulty}
-  onChange={(e) => setEditDifficulty(e.target.value)}
-  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 p-3"
-/>
-        </div>
-<div className="pt-6">
+          <div className="mt-6 flex items-center justify-center gap-2">
   <button
-    onClick={handleUpdate}
-    className="w-full rounded-xl bg-white py-3 font-semibold text-black transition hover:opacity-90"
+    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+    disabled={currentPage === 1}
+    className="rounded-lg border border-zinc-700 px-3 py-2 disabled:opacity-50"
   >
-    💾 Kaydet
+    ← Önceki
+  </button>
+
+  <span className="text-sm text-zinc-400">
+    Sayfa {currentPage} / {totalPages}
+  </span>
+
+  <button
+    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+    disabled={currentPage === totalPages}
+    className="rounded-lg border border-zinc-700 px-3 py-2 disabled:opacity-50"
+  >
+    Sonraki →
   </button>
 </div>
+        </div>
       </div>
-    </div>
-  </div>
-)}
+
+      <QuestionDrawer
+  open={drawerOpen}
+  question={selectedQuestion}
+  editExam={editExam}
+  setEditExam={setEditExam}
+  editYear={editYear}
+  setEditYear={setEditYear}
+  editTopic={editTopic}
+  setEditTopic={setEditTopic}
+  editDifficulty={editDifficulty}
+  setEditDifficulty={setEditDifficulty}
+  onClose={() => setDrawerOpen(false)}
+  onSave={handleUpdate}
+/>
+
       <NewQuestionModal
         open={open}
         onClose={() => setOpen(false)}

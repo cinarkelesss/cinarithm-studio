@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
+
 type StatsCardProps = {
   title: string;
   value: string;
@@ -11,6 +12,8 @@ export default function StatsCard({
   value,
   icon: Icon,
 }: StatsCardProps) {
+ 
+ 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 transition-all hover:border-zinc-700 hover:bg-zinc-800/60">
       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-800">
