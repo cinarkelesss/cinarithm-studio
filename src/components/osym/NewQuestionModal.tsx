@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
+import ImageUpload from "@/components/osym/ImageUpload";
+import FileUpload from "@/components/osym/FileUpload";
 
 type Props = {
   open: boolean;
@@ -17,6 +19,19 @@ const [year, setYear] = useState(new Date().getFullYear());
 const [topic, setTopic] = useState("");
 const [difficulty, setDifficulty] = useState("Orta");
 const [loading, setLoading] = useState(false);
+const [selectedFile, setSelectedFile] = useState<File | null>(null);
+const [preview, setPreview] = useState<string | null>(null);
+const [selectedPdf, setSelectedPdf] = useState<File | null>(null);
+const handleFileSelect = (file: File | null) => {
+  setSelectedFile(file);
+
+  if (!file) {
+    setPreview(null);
+    return;
+  }
+
+  setPreview(URL.createObjectURL(file));
+};
 const handleSave = async () => {
   try {
     setLoading(true);
@@ -118,6 +133,12 @@ const handleSave = async () => {
             <label className="mb-2 block text-sm text-zinc-400">
               Zorluk
             </label>
+            <div className="col-span-2">
+  <ImageUpload
+    preview={preview}
+    onFileSelect={handleFileSelect}
+  />
+</div>
 
             <select
   value={difficulty}

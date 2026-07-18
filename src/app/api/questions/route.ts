@@ -5,7 +5,13 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { exam, year, topic, difficulty } = body;
+    const {
+      exam,
+      year,
+      topic,
+      difficulty,
+      image_url,
+    } = body;
 
     const { data, error } = await supabaseAdmin
       .from("questions")
@@ -15,6 +21,7 @@ export async function POST(request: Request) {
           year,
           topic,
           difficulty,
+          image_url,
         },
       ])
       .select();
