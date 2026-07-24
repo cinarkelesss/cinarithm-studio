@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import ImageUpload from "@/components/osym/ImageUpload";
-import FileUpload from "@/components/osym/FileUpload";
 
 type Props = {
   open: boolean;
@@ -12,19 +10,13 @@ type Props = {
 };
 
 export default function NewQuestionModal({ open, onClose }: Props) {
-    const router = useRouter();
-
 const [exam, setExam] = useState("TYT");
 const [year, setYear] = useState(new Date().getFullYear());
 const [topic, setTopic] = useState("");
 const [difficulty, setDifficulty] = useState("Orta");
 const [loading, setLoading] = useState(false);
-const [selectedFile, setSelectedFile] = useState<File | null>(null);
 const [preview, setPreview] = useState<string | null>(null);
-const [selectedPdf, setSelectedPdf] = useState<File | null>(null);
 const handleFileSelect = (file: File | null) => {
-  setSelectedFile(file);
-
   if (!file) {
     setPreview(null);
     return;
@@ -32,6 +24,23 @@ const handleFileSelect = (file: File | null) => {
 
   setPreview(URL.createObjectURL(file));
 };
+
+useEffect(() => {
+  return () => {
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+  };
+}, [preview]);
+
+const resetForm = () => {
+  setExam("TYT");
+  setYear(new Date().getFullYear());
+  setTopic("");
+  setDifficulty("Orta");
+  setPreview(null);
+};
+
 const handleSave = async () => {
   try {
     setLoading(true);
@@ -56,6 +65,8 @@ const handleSave = async () => {
     }
 
     alert("✅ Soru başarıyla eklendi!");
+    resetForm();
+    onClose();
   } catch (e) {
     console.error(e);
     alert("Bir hata oluştu.");
@@ -133,12 +144,6 @@ const handleSave = async () => {
             <label className="mb-2 block text-sm text-zinc-400">
               Zorluk
             </label>
-            <div className="col-span-2">
-  <ImageUpload
-    preview={preview}
-    onFileSelect={handleFileSelect}
-  />
-</div>
 
             <select
   value={difficulty}
@@ -153,12 +158,12 @@ const handleSave = async () => {
 
           <div>
             <label className="mb-2 block text-sm text-zinc-400">
-              PDF Linki
+              Soru Görseli
             </label>
 
-            <input
-              className="w-full rounded-xl border border-zinc-700 bg-zinc-900 p-3 outline-none"
-              placeholder="https://..."
+            <ImageUpload
+              preview={preview}
+              onFileSelect={handleFileSelect}
             />
           </div>
 

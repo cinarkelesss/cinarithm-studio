@@ -1,31 +1,31 @@
 import {
   BarChart3,
   BookOpen,
-  Clock3,
-  Video,
+  BrainCircuit,
+  Network,
 } from "lucide-react";
 
 import StatsCard from "./StatsCard";
 
 const stats = [
   {
-    title: "ÖSYM Questions",
-    value: "12,486",
+    title: "Active Courses",
+    value: "4",
     icon: BookOpen,
   },
   {
-    title: "Planned Videos",
-    value: "48",
-    icon: Video,
+    title: "Linked Concepts",
+    value: "128",
+    icon: Network,
   },
   {
-    title: "Study Sessions",
-    value: "186",
-    icon: Clock3,
+    title: "Proof Sessions",
+    value: "23",
+    icon: BrainCircuit,
   },
   {
-    title: "Productivity",
-    value: "94%",
+    title: "Weekly Focus",
+    value: "16.4h",
     icon: BarChart3,
   },
 ];

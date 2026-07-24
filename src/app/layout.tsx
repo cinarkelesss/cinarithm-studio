@@ -18,7 +18,8 @@ export const metadata: Metadata = {
     default: "Cinarithm Studio",
     template: "%s | Cinarithm Studio",
   },
-  description: "Professional academic dashboard.",
+  description:
+    "Academic mathematics platform that blends structured learning, connected notes, and a premium study workspace.",
 };
 
 export default function RootLayout({
@@ -28,15 +29,15 @@ export default function RootLayout({
 }>) {
   return (
     <html
-  lang="tr"
-  suppressHydrationWarning
-  className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
->
-      <body className="min-h-full flex flex-col">
-  
-    {children}
-  
-</body>
+      lang="tr"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

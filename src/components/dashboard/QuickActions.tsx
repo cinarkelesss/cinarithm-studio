@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 
 type Props = {
-  onNewQuestion: () => void;
+  onNewQuestion?: () => void;
 };
 
 export default function QuickActions({
@@ -21,10 +21,11 @@ export default function QuickActions({
       <div className="grid grid-cols-2 gap-4">
         <button
           onClick={onNewQuestion}
+          disabled={!onNewQuestion}
           className="flex items-center gap-3 rounded-xl border border-zinc-800 p-4 transition hover:bg-zinc-800"
         >
           <Plus size={20} />
-          Yeni Soru
+          {onNewQuestion ? "Yeni Soru" : "Workspace"}
         </button>
 
         <button className="flex items-center gap-3 rounded-xl border border-zinc-800 p-4 transition hover:bg-zinc-800">

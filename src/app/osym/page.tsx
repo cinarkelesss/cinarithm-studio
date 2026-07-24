@@ -2,6 +2,8 @@ import { supabase } from "@/lib/supabase";
 import OsymClient from "./OsymClient";
 import AppShell from "@/components/layout/AppShell";
 
+export const dynamic = "force-dynamic";
+
 export default async function OsymPage() {
   const { data: questions, error } = await supabase
     .from("questions")

@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 type Props = {
   onFileSelect: (file: File | null) => void;
   preview: string | null;
@@ -15,12 +17,14 @@ export default function ImageUpload({
         Soru Görseli
       </label>
 
-      <label className="flex h-56 cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-zinc-700 bg-zinc-900 transition hover:border-white hover:bg-zinc-800">
+      <label className="relative flex h-56 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-zinc-700 bg-zinc-900 transition hover:border-white hover:bg-zinc-800">
         {preview ? (
-          <img
+          <Image
             src={preview}
             alt="Preview"
-            className="h-full w-full rounded-2xl object-contain p-3"
+            fill
+            unoptimized
+            className="object-contain p-3"
           />
         ) : (
           <>

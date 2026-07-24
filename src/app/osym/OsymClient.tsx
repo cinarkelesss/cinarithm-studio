@@ -6,7 +6,7 @@ import StatsCards from "@/components/osym/StatsCards";
 import NewQuestionModal from "@/components/osym/NewQuestionModal";
 import { Plus } from "lucide-react";
 import QuestionTable from "@/components/osym/QuestionTable";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import QuestionsChart from "@/components/dashboard/QuestionsChart";
 import ExamDistributionChart from "@/components/dashboard/ExamDistributionChart";
 import TopTopicsChart from "@/components/dashboard/TopTopicsChart";
@@ -37,10 +37,6 @@ const [editDifficulty, setEditDifficulty] = useState("");
 const [search, setSearch] = useState("");
 const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 const [currentPage, setCurrentPage] = useState(1);
-
-useEffect(() => {
-  setCurrentPage(1);
-}, [search, sortOrder]);
 
 const ITEMS_PER_PAGE = 10;
   const router = useRouter();
@@ -125,11 +121,12 @@ return (
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-black tracking-tight">
-              ÖSYM Database
+              Problem Database
             </h1>
 
             <p className="mt-2 text-zinc-400">
-              Search, organize and manage all mathematics questions.
+              ÖSYM ve akademik matematik problemlerini düzenle, etiketle ve
+              çalışılabilir akışlara çevir.
             </p>
           </div>
 
@@ -168,11 +165,15 @@ return (
 </div>
         <SearchToolbar
   search={search}
-  setSearch={setSearch}
+  setSearch={(value) => {
+    setSearch(value);
+    setCurrentPage(1);
+  }}
   sortOrder={sortOrder}
-  toggleSort={() =>
-    setSortOrder((prev) => (prev === "desc" ? "asc" : "desc"))
-  }
+  toggleSort={() => {
+    setSortOrder((prev) => (prev === "desc" ? "asc" : "desc"));
+    setCurrentPage(1);
+  }}
 />
 
           
