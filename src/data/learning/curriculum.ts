@@ -27,6 +27,7 @@ type ModuleSeed = {
   title: string;
   description: string;
   lessons: LessonSeed[];
+  driveFolderUrl?: string;
 };
 
 type CourseSeed = {
@@ -40,6 +41,7 @@ type CourseSeed = {
   flagship?: boolean;
   accent: string;
   modules: ModuleSeed[];
+  driveFolderUrl?: string;
 };
 
 type ExerciseSeed = {
@@ -522,6 +524,127 @@ const courseSeeds: CourseSeed[] = [
             sourceOrder: 16,
           },
         ],
+      },
+    ],
+  },
+  {
+    slug: "calculus",
+    title: "Calculus",
+    shortTitle: "Calculus",
+    description: "Fonksiyonlar, seriler, limitler ve büyüme mertebeleri için Drive video çalışma alanı.",
+    summary: "12 videoluk Functions serisini izle, ders notlarını tut ve ilerlemeni kaydet.",
+    kind: "core",
+    accent: "bg-zinc-700/30",
+    driveFolderUrl: "https://drive.google.com/drive/folders/1Rs-WbDXNH9rVJOkp6tY27tb7eOQxrCkk?hl=tr",
+    modules: [
+      {
+        title: "01 — Functions",
+        description: "Drive'daki Functions videolarını numaralı sırasıyla çalış.",
+        driveFolderUrl: "https://drive.google.com/drive/folders/1KF_E01eWbZEjl801L5amJdZZx4LZ9UnU",
+        lessons: [
+          {
+            title: "Functions",
+            description: "Fonksiyonlar videosunu izle ve temel fikirleri not et.",
+            concepts: ["concept-functions"],
+            sourceFileName: "1 Functions.mp4",
+            driveFileId: "1Z_fxG0X1cIoOGizyBGovL7_WykZ3NpDX",
+            videoSource: { provider: "google-drive", fileId: "1Z_fxG0X1cIoOGizyBGovL7_WykZ3NpDX" },
+          },
+          {
+            title: "Exponentials",
+            description: "Üstel fonksiyonlar videosunu çalış ve örneklerini not et.",
+            concepts: ["concept-functions"],
+            sourceFileName: "2 Exponentials.mp4",
+            driveFileId: "1ytS-v810zEOu-DtCGA-bMB3aA_Yac5zQ",
+            videoSource: { provider: "google-drive", fileId: "1ytS-v810zEOu-DtCGA-bMB3aA_Yac5zQ" },
+          },
+          {
+            title: "Exponentials — Bonus",
+            description: "Üstel fonksiyonlar ek videosunu çalış.",
+            concepts: ["concept-functions"],
+            sourceFileName: "3 Exponentials BONUS.mp4",
+            driveFileId: "1GQXLEe99iS53b7A5_0VsYzjVDkTPb3xR",
+            videoSource: { provider: "google-drive", fileId: "1GQXLEe99iS53b7A5_0VsYzjVDkTPb3xR" },
+          },
+          {
+            title: "Taylor Series",
+            description: "Taylor serileri videosunu çalış ve kilit noktaları not et.",
+            concepts: ["concept-taylor", "concept-series"],
+            sourceFileName: "4 Taylor Series.mp4",
+            driveFileId: "1JxWmirN3tKSXYRcYEVU0VpGTDcDLgcSf",
+            videoSource: { provider: "google-drive", fileId: "1JxWmirN3tKSXYRcYEVU0VpGTDcDLgcSf" },
+          },
+          {
+            title: "Computing Taylor Series",
+            description: "Taylor serisi hesabı videosunu çalış.",
+            concepts: ["concept-taylor", "concept-series"],
+            sourceFileName: "5 Computing Taylor Series.mp4",
+            driveFileId: "1Wxbtb9uO_3aKWp0YjaXr4ssTDOu3_psO",
+            videoSource: { provider: "google-drive", fileId: "1Wxbtb9uO_3aKWp0YjaXr4ssTDOu3_psO" },
+          },
+          {
+            title: "Convergence",
+            description: "Yakınsaklık videosunu çalış ve sorularını not et.",
+            concepts: ["concept-series", "concept-limit"],
+            sourceFileName: "6 Convergence.mp4",
+            driveFileId: "1KGQDisjUd0lT38wqtjPzROW8PQfnbUsz",
+            videoSource: { provider: "google-drive", fileId: "1KGQDisjUd0lT38wqtjPzROW8PQfnbUsz" },
+          },
+          {
+            title: "Convergence — Bonus",
+            description: "Yakınsaklık ek videosunu çalış.",
+            concepts: ["concept-series", "concept-limit"],
+            sourceFileName: "7 Convergence BONUS.mp4",
+            driveFileId: "1rR6OALwa-hkjIJCDO_3ILit3JjYuhjxi",
+            videoSource: { provider: "google-drive", fileId: "1rR6OALwa-hkjIJCDO_3ILit3JjYuhjxi" },
+          },
+          {
+            title: "Expansion Points",
+            description: "Açılım noktaları videosunu çalış.",
+            concepts: ["concept-taylor"],
+            sourceFileName: "8 Expansion Points.mp4",
+            driveFileId: "1BLHGEhcha6eP5ULxkR0fKtW7PRay8rPz",
+            videoSource: { provider: "google-drive", fileId: "1BLHGEhcha6eP5ULxkR0fKtW7PRay8rPz" },
+          },
+          {
+            title: "Limits",
+            description: "Limitler videosunu çalış ve kendi özetini çıkar.",
+            concepts: ["concept-limit"],
+            sourceFileName: "9 Limits.mp4",
+            driveFileId: "1Da86xDIZyKRxvvle1y9PIe1ioo0tJzxl",
+            videoSource: { provider: "google-drive", fileId: "1Da86xDIZyKRxvvle1y9PIe1ioo0tJzxl" },
+          },
+          {
+            title: "L-Hopital Rules",
+            description: "L'Hôpital kuralları videosunu çalış.",
+            concepts: ["concept-limit", "concept-derivative"],
+            sourceFileName: "10 L-Hopital Rules.mp4",
+            driveFileId: "1QpHGFjTH69Cxa-as7PMbdHoTQryhbx09",
+            videoSource: { provider: "google-drive", fileId: "1QpHGFjTH69Cxa-as7PMbdHoTQryhbx09" },
+          },
+          {
+            title: "Orders of Growth",
+            description: "Büyüme mertebeleri videosunu çalış.",
+            concepts: ["concept-limit", "concept-functions"],
+            sourceFileName: "11 Orders of Growth.mp4",
+            driveFileId: "1UV04g6A011fmPXVery1QyM4ro6tzWV6x",
+            videoSource: { provider: "google-drive", fileId: "1UV04g6A011fmPXVery1QyM4ro6tzWV6x" },
+          },
+          {
+            title: "Orders of Growth — Bonus",
+            description: "Büyüme mertebeleri ek videosunu çalış.",
+            concepts: ["concept-limit", "concept-functions"],
+            sourceFileName: "12 Orders of Growth BONUS.mp4",
+            driveFileId: "1HDeOKdDJvN-avgzHmvHHgUUBAxl99ZcZ",
+            videoSource: { provider: "google-drive", fileId: "1HDeOKdDJvN-avgzHmvHHgUUBAxl99ZcZ" },
+          },
+        ],
+      },
+      {
+        title: "02 — Differentiation",
+        description: "Drive klasörü hazır; içinde henüz ders videosu bulunmuyor.",
+        driveFolderUrl: "https://drive.google.com/drive/folders/1_OVWniyNQWQTorE3kZOgHdo189Nrf5SO",
+        lessons: [],
       },
     ],
   },
@@ -2611,7 +2734,7 @@ function buildCatalog() {
           sourceFileName: archiveEntry?.originalFileName ?? lessonSeed.sourceFileName,
           originalFileName: archiveEntry?.originalFileName,
           driveFileId: archiveEntry?.driveFileId ?? lessonSeed.driveFileId,
-          driveUrl: archiveEntry?.driveUrl,
+          driveUrl: archiveEntry?.driveUrl ?? lessonSeed.videoSource?.openUrl,
           fileSizeBytes: archiveEntry?.sizeBytes,
           durationMinutes: archiveEntry ? undefined : lessonSeed.durationMinutes,
           concepts: lessonSeed.concepts,
@@ -2631,6 +2754,7 @@ function buildCatalog() {
         description: moduleSeed.description,
         curriculumOrder: moduleIndex + 1,
         lessonIds,
+        driveFolderUrl: moduleSeed.driveFolderUrl,
       });
     });
 
@@ -2647,6 +2771,7 @@ function buildCatalog() {
       moduleIds,
       conceptIds: [],
       accent: courseSeed.accent,
+      driveFolderUrl: courseSeed.driveFolderUrl,
     });
   });
 

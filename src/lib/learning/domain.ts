@@ -38,6 +38,7 @@ export type LearningCourse = {
   moduleIds: string[];
   conceptIds: string[];
   accent: string;
+  driveFolderUrl?: string;
 };
 
 export type LearningModule = {
@@ -48,6 +49,7 @@ export type LearningModule = {
   description: string;
   curriculumOrder: number;
   lessonIds: string[];
+  driveFolderUrl?: string;
 };
 
 export type LearningLesson = {

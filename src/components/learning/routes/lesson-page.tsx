@@ -844,7 +844,7 @@ export function LessonPage({ course, lesson }: LessonPageProps) {
                     {lessonStatus === "completed"
                       ? recommendedNextLesson
                         ? "Bu ders tamamlandı. Hazır olduğunda öğrenme yolundaki sıradaki öneriye geçebilirsin."
-                        : "Bu ders tamamlandı. Real Analysis öğrenme yolu da tamamlandıysa kavramları gözden geçirip pratik yapabilirsin."
+                        : `Bu ders tamamlandı. ${course.title} dersleri de bittiyse kavramları gözden geçirip pratik yapabilirsin.`
                       : "Dersi tamamlamak kurs ilerlemeni günceller ve çalışma akışını ileri taşır."}
                   </p>
                 </div>

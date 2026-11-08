@@ -60,6 +60,13 @@ export function LearningLibraryPage() {
             Alıştırmalar
             <Compass className="size-4" />
           </Link>
+          <Link
+            href="/learning/course/calculus"
+            className="flex h-11 items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.03] px-4 text-sm font-medium text-white transition hover:bg-white/[0.08]"
+          >
+            Calculus
+            <ArrowRight className="size-4" />
+          </Link>
         </div>
       }
     >
@@ -171,7 +178,9 @@ export function LearningLibraryPage() {
           const recommendation = getCourseRecommendation(state, course.id);
           const nextLesson =
             recommendation.lesson ??
-            learningCatalog.lessons.find((lesson) => lesson.courseId === course.id);
+            (recommendation.kind === "course_completed"
+              ? null
+              : learningCatalog.lessons.find((lesson) => lesson.courseId === course.id));
 
           return (
             <Link key={course.id} href={`/learning/course/${course.slug}`}>
@@ -215,7 +224,7 @@ export function LearningLibraryPage() {
                     <div className="rounded-2xl border border-white/8 bg-black/10 px-4 py-3">
                       <p className="text-xs uppercase tracking-[0.18em] text-white/32">Sıradaki</p>
                       <p className="mt-2 text-sm font-semibold text-white">
-                        {nextLesson?.title ?? (path ? "Öğrenme yolu tamamlandı" : "Kurs görünümü")}
+                        {nextLesson?.title ?? "Kurs tamamlandı"}
                       </p>
                     </div>
                   </div>

@@ -9,6 +9,7 @@ import {
   ChevronDown,
   ChevronRight,
   Circle,
+  ExternalLink,
   PlayCircle,
   Sigma,
 } from "lucide-react";
@@ -181,9 +182,7 @@ export function CoursePage({ course }: CoursePageProps) {
   const recommendation = getCourseRecommendation(state, course.id);
   const nextLesson =
     recommendation.lesson ??
-    (learningPath && recommendation.kind === "course_completed"
-      ? null
-      : allLessons[0] ?? null);
+    (pathIsComplete ? null : allLessons[0] ?? null);
   const nextStage = nextLesson ? getLessonPathPosition(nextLesson.id)?.stage : null;
 
   const currentStageId = useMemo(() => {
@@ -249,25 +248,43 @@ export function CoursePage({ course }: CoursePageProps) {
       title={course.title}
       description={course.description}
       action={
-        nextLesson ? (
-          <Link
-            href={`/learning/course/${course.slug}/lesson/${nextLesson.slug}`}
-            className="flex h-11 items-center gap-2 rounded-2xl bg-white px-4 text-sm font-medium text-zinc-950 transition hover:bg-zinc-200"
-          >
-            {progress.progressPercent > 0 ? "Devam Et" : "Başla"}
-            <ArrowRight className="size-4" />
-          </Link>
-        ) : (
-          <Link
-            href="/practice"
-            className="flex h-11 items-center gap-2 rounded-2xl bg-white px-4 text-sm font-medium text-zinc-950 transition hover:bg-zinc-200"
-          >
-            Pratik Yap
-            <ArrowRight className="size-4" />
-          </Link>
-        )
+        <>
+          {nextLesson ? (
+            <Link
+              href={`/learning/course/${course.slug}/lesson/${nextLesson.slug}`}
+              className="flex h-11 items-center gap-2 rounded-2xl bg-white px-4 text-sm font-medium text-zinc-950 transition hover:bg-zinc-200"
+            >
+              {progress.progressPercent > 0 ? "Devam Et" : "Başla"}
+              <ArrowRight className="size-4" />
+            </Link>
+          ) : (
+            <Link
+              href="/practice"
+              className="flex h-11 items-center gap-2 rounded-2xl bg-white px-4 text-sm font-medium text-zinc-950 transition hover:bg-zinc-200"
+            >
+              Pratik Yap
+              <ArrowRight className="size-4" />
+            </Link>
+          )}
+          {course.driveFolderUrl ? (
+            <a
+              href={course.driveFolderUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-11 items-center gap-2 rounded-2xl border border-white/12 bg-white/[0.03] px-4 text-sm font-medium text-white transition hover:bg-white/[0.08]"
+            >
+              Drive klasörünü aç
+              <ExternalLink className="size-4" />
+            </a>
+          ) : null}
+        </>
       }
     >
+      {course.driveFolderUrl ? (
+        <p className="rounded-2xl border border-white/8 bg-white/[0.03] px-5 py-3 text-sm text-white/54">
+          Drive videolarını açmak için klasöre erişim iznin olmalı.
+        </p>
+      ) : null}
       <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
         <Card className="surface-glow border-border bg-card backdrop-blur-xl">
           <CardContent className="space-y-5 px-5 py-5 sm:px-6">
@@ -318,7 +335,7 @@ export function CoursePage({ course }: CoursePageProps) {
 
             <div className="space-y-2">
               <h2 className="font-heading text-2xl text-white">
-                {nextLesson?.title ?? "Real Analysis öğrenme yolunu tamamladın."}
+                {nextLesson?.title ?? `${course.title} derslerini tamamladın.`}
               </h2>
               <p className="text-sm leading-7 text-white/52">{recommendation.explanation}</p>
             </div>
@@ -666,7 +683,9 @@ export function CoursePage({ course }: CoursePageProps) {
                     <div className="max-w-3xl">
                       <div className="flex flex-wrap items-center gap-2">
                         <Badge className="bg-white/10 text-white/72">
-                          {moduleProgress.completed}/{moduleProgress.total} tamamlandı
+                          {moduleLessons.length > 0
+                            ? `${moduleProgress.completed}/${moduleProgress.total} tamamlandı`
+                            : "Henüz video yok"}
                         </Badge>
                         {activeLesson ? (
                           <Badge className="bg-zinc-100/14 text-zinc-200">Şu anki modül</Badge>
@@ -674,23 +693,36 @@ export function CoursePage({ course }: CoursePageProps) {
                       </div>
                       <h2 className="mt-3 font-heading text-2xl text-white">{module.title}</h2>
                       <p className="mt-2 text-sm leading-7 text-white/52">{module.description}</p>
+                      {module.driveFolderUrl ? (
+                        <a
+                          href={module.driveFolderUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex items-center gap-2 text-sm text-white/72 transition hover:text-white"
+                        >
+                          Drive klasörü
+                          <ExternalLink className="size-4" />
+                        </a>
+                      ) : null}
                     </div>
-                    <div className="min-w-[220px] space-y-3">
-                      <div className="flex items-center justify-between text-sm text-white/52">
-                        <span>
-                          {moduleProgress.completed} / {moduleProgress.total}
-                        </span>
-                        <span>%{moduleProgress.progressPercent}</span>
+                    {moduleLessons.length > 0 ? (
+                      <div className="min-w-[220px] space-y-3">
+                        <div className="flex items-center justify-between text-sm text-white/52">
+                          <span>
+                            {moduleProgress.completed} / {moduleProgress.total}
+                          </span>
+                          <span>%{moduleProgress.progressPercent}</span>
+                        </div>
+                        <Progress
+                          value={moduleProgress.progressPercent}
+                          className="[&_[data-slot='progress-track']]:h-1.5 [&_[data-slot='progress-track']]:bg-white/8 [&_[data-slot='progress-indicator']]:bg-white"
+                        />
                       </div>
-                      <Progress
-                        value={moduleProgress.progressPercent}
-                        className="[&_[data-slot='progress-track']]:h-1.5 [&_[data-slot='progress-track']]:bg-white/8 [&_[data-slot='progress-indicator']]:bg-white"
-                      />
-                    </div>
+                    ) : null}
                   </div>
 
                   <div className="overflow-hidden rounded-[26px] border border-white/8 bg-black/12">
-                    {moduleLessons.map((lesson, lessonIndex) => {
+                    {moduleLessons.length > 0 ? moduleLessons.map((lesson, lessonIndex) => {
                       const status = getLessonStatusValue(lesson.id);
                       const isCurrent =
                         continueLessonId === lesson.id || state.lastLessonId === lesson.id;
@@ -756,7 +788,11 @@ export function CoursePage({ course }: CoursePageProps) {
                           </div>
                         </Link>
                       );
-                    })}
+                    }) : (
+                      <p className="px-5 py-5 text-sm text-white/52">
+                        Bu klasörde henüz ders videosu bulunmuyor.
+                      </p>
+                    )}
                   </div>
                 </CardContent>
               </Card>

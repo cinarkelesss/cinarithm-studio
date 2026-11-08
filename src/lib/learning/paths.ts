@@ -287,7 +287,14 @@ function getFallbackRecommendedLesson(
       }
 
       const currentIndex = scopedLessons.findIndex((lesson) => lesson.id === lastLesson.id);
-      return scopedLessons[currentIndex + 1] ?? lastLesson;
+      const nextIncomplete = scopedLessons.slice(currentIndex + 1).find(
+        (lesson) =>
+          getLessonStatus(state, lesson.id) !== "completed" &&
+          isUnlockedByCurriculum(state, lesson)
+      );
+      if (nextIncomplete) {
+        return nextIncomplete;
+      }
     }
   }
 
@@ -299,11 +306,12 @@ function getFallbackRecommendedLesson(
     return inProgress;
   }
 
-  return (
-    scopedLessons.find((lesson) => isUnlockedByCurriculum(state, lesson)) ??
-    scopedLessons[0] ??
-    null
+  const incompleteLessons = scopedLessons.filter(
+    (lesson) => getLessonStatus(state, lesson.id) !== "completed"
   );
+  return incompleteLessons.find((lesson) => isUnlockedByCurriculum(state, lesson)) ??
+    incompleteLessons[0] ??
+    null;
 }
 
 function buildReadyExplanation(
@@ -585,13 +593,18 @@ export function getCourseRecommendation(
   courseId: string
 ): LearningPathRecommendation {
   const lesson = getRecommendedNextLesson(state, courseId);
-  const progress = getPathProgress(state, courseId);
+  const courseLessons = getCourseLessonsSorted(courseId);
+  const isComplete = getPathIndexForCourse(courseId)
+    ? getPathProgress(state, courseId).isComplete
+    : courseLessons.length > 0 && courseLessons.every(
+        (item) => getLessonStatus(state, item.id) === "completed"
+      );
 
   if (!lesson) {
     return {
       lesson: null,
-      explanation: progress.isComplete
-        ? "Öğrenme yolu tamamlandı. İstersen kavramları gözden geçir veya pratik yap."
+      explanation: isComplete
+        ? "Tüm dersleri tamamladın. İstersen kavramları gözden geçir veya pratik yap."
         : "Bu kurs için önerilen ders bulunamadı.",
       kind: "course_completed",
     };
