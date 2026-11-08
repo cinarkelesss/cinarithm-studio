@@ -1,4 +1,7 @@
 import { acikKumelerVeDenkTopolojilerLessonContent } from "@/data/learning/content/acik-kumeler-ve-denk-topolojiler";
+import { calculusExponentialsLessonContent } from "@/data/learning/content/calculus-exponentials";
+import { calculusFunctionsLessonContent } from "@/data/learning/content/calculus-functions";
+import { calculusTaylorSeriesLessonContent } from "@/data/learning/content/calculus-taylor-series";
 import { cizgelerTeorisineGirisLessonContent } from "@/data/learning/content/cizgeler-teorisine-giris";
 import { duzgunSureklilikLessonContent } from "@/data/learning/content/duzgun-sureklilik";
 import { gercelSayilardaNinciKokLessonContent } from "@/data/learning/content/gercel-sayilarda-ninci-kok";
@@ -16,6 +19,9 @@ import { validateLessonRichContentEntries } from "@/lib/learning/editorial";
 import type { LessonRichContent } from "@/lib/learning/lesson-content";
 
 const lessonContentEntries: LessonRichContent[] = [
+  calculusFunctionsLessonContent,
+  calculusExponentialsLessonContent,
+  calculusTaylorSeriesLessonContent,
   tamlikOzelligiLessonContent,
   duzgunSureklilikLessonContent,
   acikKumelerVeDenkTopolojilerLessonContent,
