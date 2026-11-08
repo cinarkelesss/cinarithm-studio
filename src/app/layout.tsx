@@ -1,24 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
-  title: {
-    default: "Cinarithm Studio",
-    template: "%s | Cinarithm Studio",
-  },
-  description: "Professional academic dashboard.",
+  title: "Cinarithm Alpha",
+  description: "Matematikte derinleşmek için.",
 };
 
 export default function RootLayout({
@@ -28,15 +13,11 @@ export default function RootLayout({
 }>) {
   return (
     <html
-  lang="tr"
-  suppressHydrationWarning
-  className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
->
-      <body className="min-h-full flex flex-col">
-  
-    {children}
-  
-</body>
+      lang="tr"
+      className="dark h-full antialiased"
+      suppressHydrationWarning
+    >
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
